@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ssd_keras_ros</name>
+  <version>0.0.0</version>
+  <description>The ssd_keras_ros package</description>
+
+  <maintainer email="minh.nguyen@smail.inf.h-brs.de">Minh Nguyen</maintainer>
+
+  <license>LGPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+
+  <build_depend>roslint</build_depend>
+
+</package>
