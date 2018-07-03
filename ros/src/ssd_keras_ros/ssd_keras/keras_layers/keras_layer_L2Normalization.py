@@ -23,7 +23,7 @@ from keras.engine.topology import InputSpec
 from keras.engine.topology import Layer
 
 class L2Normalization(Layer):
-    '''
+    """
     Performs L2 normalization on the input tensor with a learnable scaling parameter
     as described in the paper "Parsenet: Looking Wider to See Better" (see references)
     and as used in the original SSD model.
@@ -41,7 +41,7 @@ class L2Normalization(Layer):
 
     References:
         http://cs.unc.edu/~wliu/papers/parsenet.pdf
-    '''
+    """
 
     def __init__(self, gamma_init=20, **kwargs):
         if K.image_dim_ordering() == 'tf':

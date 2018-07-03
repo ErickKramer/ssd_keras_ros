@@ -1,4 +1,4 @@
-'''
+"""
 A few utilities that are useful when working with the MS COCO datasets.
 
 Copyright (C) 2018 Pierluigi Ferrari
@@ -14,21 +14,21 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 import json
 from tqdm import trange
 from math import ceil
 import sys
 
-from data_generator.object_detection_2d_geometric_ops import Resize
-from data_generator.object_detection_2d_patch_sampling_ops import RandomPadFixedAR
-from data_generator.object_detection_2d_photometric_ops import ConvertTo3Channels
-from ssd_encoder_decoder.ssd_output_decoder import decode_detections
-from data_generator.object_detection_2d_misc_utils import apply_inverse_transforms
+from ..data_generator.object_detection_2d_geometric_ops import Resize
+from ..data_generator.object_detection_2d_patch_sampling_ops import RandomPadFixedAR
+from ..data_generator.object_detection_2d_photometric_ops import ConvertTo3Channels
+from ..ssd_encoder_decoder.ssd_output_decoder import decode_detections
+from ..data_generator.object_detection_2d_misc_utils import apply_inverse_transforms
 
 def get_coco_category_maps(annotations_file):
-    '''
+    """
     Builds dictionaries that map between MS COCO category IDs, transformed category IDs, and category names.
     The original MS COCO category IDs are not consecutive unfortunately: The 80 category IDs are spread
     across the integers 1 through 90 with some integers skipped. Since we usually use a one-hot
@@ -43,7 +43,7 @@ def get_coco_category_maps(annotations_file):
         2) classes_to_cats: A dictionary that maps between the transformed (keys) and the original category IDs (values).
         3) cats_to_names: A dictionary that maps between original category IDs (keys) and the respective category names (values).
         4) classes_to_names: A list of the category names (values) with their indices representing the transformed IDs.
-    '''
+    """
     with open(annotations_file, 'r') as f:
         annotations = json.load(f)
     cats_to_classes = {}
@@ -73,7 +73,7 @@ def predict_all_to_json(out_file,
                         top_k=200,
                         pred_coords='centroids',
                         normalize_coords=True):
-    '''
+    """
     Runs detection predictions over the whole dataset given a model and saves them in a JSON file
     in the MS COCO detection results format.
 
@@ -114,7 +114,7 @@ def predict_all_to_json(out_file,
 
     Returns:
         None.
-    '''
+    """
 
     convert_to_3_channels = ConvertTo3Channels()
     resize = Resize(height=img_height,width=img_width)

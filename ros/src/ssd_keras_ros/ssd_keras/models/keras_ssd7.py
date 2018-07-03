@@ -1,4 +1,4 @@
-'''
+"""
 A small 7-layer Keras model with SSD architecture. Also serves as a template to build arbitrary network architectures.
 
 Copyright (C) 2018 Pierluigi Ferrari
@@ -14,7 +14,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 from __future__ import division
 import numpy as np
@@ -23,9 +23,9 @@ from keras.layers import Input, Lambda, Conv2D, MaxPooling2D, BatchNormalization
 from keras.regularizers import l2
 import keras.backend as K
 
-from keras_layers.keras_layer_AnchorBoxes import AnchorBoxes
-from keras_layers.keras_layer_DecodeDetections import DecodeDetections
-from keras_layers.keras_layer_DecodeDetectionsFast import DecodeDetectionsFast
+from ..keras_layers.keras_layer_AnchorBoxes import AnchorBoxes
+from ..keras_layers.keras_layer_DecodeDetections import DecodeDetections
+from ..keras_layers.keras_layer_DecodeDetectionsFast import DecodeDetectionsFast
 
 def build_model(image_size,
                 n_classes,
@@ -51,7 +51,7 @@ def build_model(image_size,
                 top_k=200,
                 nms_max_output_size=400,
                 return_predictor_sizes=False):
-    '''
+    """
     Build a Keras model with SSD architecture, see references.
 
     The model consists of convolutional feature layers and a number of convolutional
@@ -172,7 +172,7 @@ def build_model(image_size,
 
     References:
         https://arxiv.org/abs/1512.02325v5
-    '''
+    """
 
     n_predictor_layers = 4 # The number of predictor conv layers in the network
     n_classes += 1 # Account for the background class.

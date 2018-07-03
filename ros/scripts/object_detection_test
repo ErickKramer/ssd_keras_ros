@@ -1,0 +1,61 @@
+#!/usr/bin/env python2
+import argparse
+from importlib import import_module
+
+
+def main(image_path, class_annotation_file, weight_file, get_model_func):
+    import yaml
+    import cv2
+    from matplotlib import pyplot as plt
+    from mdr_perception_libs import RgbDetectionKey
+    from mdr_perception_libs.visualization import BoundingBoxKey, visualize_boxes, bgr_dict_from_classes
+    from ssd_keras_ros import SSDKerasObjectDetector
+
+    with open(class_annotation_file, 'r') as infile:
+        classes = yaml.load(infile)
+
+    detector = SSDKerasObjectDetector(weights_path=weight_file,
+                                      target_size=(300, 300),
+                                      classes=classes,
+                                      func_get_model=get_model_func,
+                                      conf_threshold=0.5)
+
+    img = cv2.imread(image_path)
+    img_msg = detector._cv_bridge.cv2_to_imgmsg(img, 'bgr8')
+    result = detector.detect([img_msg])
+
+    color_dict = bgr_dict_from_classes(classes.values())
+
+    plt.figure(figsize=(20, 12))
+
+    boxes = []
+    for box in result[0]:
+        bounding_box = {BoundingBoxKey.X_MIN: box[RgbDetectionKey.X_MIN],
+                        BoundingBoxKey.Y_MIN: box[RgbDetectionKey.Y_MIN],
+                        BoundingBoxKey.X_MAX: box[RgbDetectionKey.X_MAX],
+                        BoundingBoxKey.Y_MAX: box[RgbDetectionKey.Y_MAX]}
+        label = '{}: {:.2f}'.format(box[RgbDetectionKey.CLASS], box[RgbDetectionKey.CONF])
+        bounding_box[BoundingBoxKey.LABEL] = label
+        bounding_box[BoundingBoxKey.COLOR] = color_dict[box[RgbDetectionKey.CLASS]]
+        boxes.append(bounding_box)
+
+    box_image = visualize_boxes(img, boxes)
+    plt.imshow(cv2.cvtColor(box_image, cv2.COLOR_BGR2RGB))
+    plt.show()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Tool to test ssd_keras object detection')
+    parser.add_argument('--image', '-i', required=True, help='image to be tested.')
+    parser.add_argument('--class-file', '-c', required=True, help='YAML file containing class annotations.')
+    parser.add_argument('--weight-file', '-w', required=True, help='file containing weights for the loaded model.')
+    parser.add_argument('--get-model-module', '-m', default='ssd_keras_ros.models',
+                        help='module containing function specified with --get-model-function.')
+    parser.add_argument('--get-model-function', '-f', default='get_ssd300_coco_inference_model',
+                        help='function used to construct SSD model, which should match with weight file.')
+    args = parser.parse_args()
+
+    print("importing function '{0}' from module '{1}'\n".format(args.get_model_function, args.get_model_module))
+    get_model_func = getattr(import_module(args.get_model_module), args.get_model_function)
+
+    main(args.image, args.class_file, args.weight_file, get_model_func)

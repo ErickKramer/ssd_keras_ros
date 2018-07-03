@@ -1,4 +1,4 @@
-'''
+"""
 A Keras port of the original Caffe SSD512 network.
 
 Copyright (C) 2018 Pierluigi Ferrari
@@ -14,7 +14,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 from __future__ import division
 import numpy as np
@@ -23,10 +23,10 @@ from keras.layers import Input, Lambda, Activation, Conv2D, MaxPooling2D, ZeroPa
 from keras.regularizers import l2
 import keras.backend as K
 
-from keras_layers.keras_layer_AnchorBoxes import AnchorBoxes
-from keras_layers.keras_layer_L2Normalization import L2Normalization
-from keras_layers.keras_layer_DecodeDetections import DecodeDetections
-from keras_layers.keras_layer_DecodeDetectionsFast import DecodeDetectionsFast
+from ..keras_layers.keras_layer_AnchorBoxes import AnchorBoxes
+from ..keras_layers.keras_layer_L2Normalization import L2Normalization
+from ..keras_layers.keras_layer_DecodeDetections import DecodeDetections
+from ..keras_layers.keras_layer_DecodeDetectionsFast import DecodeDetectionsFast
 
 def ssd_512(image_size,
             n_classes,
@@ -58,7 +58,7 @@ def ssd_512(image_size,
             top_k=200,
             nms_max_output_size=400,
             return_predictor_sizes=False):
-    '''
+    """
     Build a Keras model with SSD512 architecture, see references.
 
     The base network is a reduced atrous VGG-16, extended by the SSD architecture,
@@ -171,7 +171,7 @@ def ssd_512(image_size,
 
     References:
         https://arxiv.org/abs/1512.02325v5
-    '''
+    """
 
     n_predictor_layers = 7 # The number of predictor conv layers in the network is 7 for the original SSD512
     n_classes += 1 # Account for the background class.
