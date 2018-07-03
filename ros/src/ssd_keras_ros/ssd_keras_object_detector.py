@@ -2,8 +2,8 @@ import numpy as np
 
 from cv_bridge import CvBridge
 
-from mdr_perception_libs import RgbDetector, RgbDetectionKey
-from mdr_perception_libs.utils import process_image_message
+from mas_perception_libs import RgbDetector, RgbDetectionKey
+from mas_perception_libs.utils import process_image_message
 
 from ssd_keras.keras_loss_function.keras_ssd_loss import SSDLoss
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ssd_keras_ros)
 
 find_package(catkin REQUIRED COMPONENTS
-  mdr_perception_libs
+  mas_perception_libs
   roslint
   rospy
 )

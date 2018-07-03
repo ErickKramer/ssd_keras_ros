@@ -7,8 +7,8 @@ def main(image_path, class_annotation_file, weight_file, get_model_func):
     import yaml
     import cv2
     from matplotlib import pyplot as plt
-    from mdr_perception_libs import RgbDetectionKey
-    from mdr_perception_libs.visualization import BoundingBoxKey, visualize_boxes, bgr_dict_from_classes
+    from mas_perception_libs import RgbDetectionKey
+    from mas_perception_libs.visualization import BoundingBoxKey, visualize_boxes, bgr_dict_from_classes
     from ssd_keras_ros import SSDKerasObjectDetector
 
     with open(class_annotation_file, 'r') as infile:
