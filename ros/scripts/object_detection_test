@@ -4,24 +4,23 @@ from importlib import import_module
 
 
 def main(image_path, class_annotation_file, weight_file, get_model_func):
-    import yaml
     import cv2
     from matplotlib import pyplot as plt
     from mas_perception_libs import ImageDetectionKey
     from mas_perception_libs.visualization import BoundingBoxKey, visualize_boxes, bgr_dict_from_classes
     from ssd_keras_ros import SSDKerasObjectDetector
 
-    with open(class_annotation_file, 'r') as infile:
-        classes = yaml.load(infile)
-
-    detector = SSDKerasObjectDetector(classes, weights_path=weight_file, target_size=(300, 300),
-                                      func_get_model=get_model_func, conf_threshold=0.5)
+    detector = SSDKerasObjectDetector(weights_path=weight_file,
+                                      target_size=(300, 300),
+                                      class_file=class_annotation_file,
+                                      func_get_model=get_model_func,
+                                      conf_threshold=0.5)
 
     img = cv2.imread(image_path)
     img_msg = detector._cv_bridge.cv2_to_imgmsg(img, 'bgr8')
     result = detector.detect([img_msg])
 
-    color_dict = bgr_dict_from_classes(classes.values())
+    color_dict = bgr_dict_from_classes(detector.classes.values())
 
     plt.figure(figsize=(20, 12))
 

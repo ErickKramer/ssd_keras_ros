@@ -9,7 +9,7 @@ from ssd_keras.keras_loss_function.keras_ssd_loss import SSDLoss
 
 
 class SSDKerasObjectDetector(ImageDetector):
-    def __init__(self, classes, **kwargs):
+    def __init__(self, **kwargs):
         # for ROS image message conversion
         self._cv_bridge = CvBridge()
         # initialize members
@@ -17,7 +17,7 @@ class SSDKerasObjectDetector(ImageDetector):
         self._img_preprocess_func = None
         self._conf_threshold = None
         self._model = None
-        super(SSDKerasObjectDetector, self).__init__(classes, **kwargs)
+        super(SSDKerasObjectDetector, self).__init__(**kwargs)
 
     def load_model(self, **kwargs):
         from keras import backend as K
