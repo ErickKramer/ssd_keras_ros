@@ -2,13 +2,13 @@ import numpy as np
 
 from cv_bridge import CvBridge
 
-from mas_perception_libs import RgbDetector, RgbDetectionKey
+from mas_perception_libs import ImageDetector, ImageDetectionKey
 from mas_perception_libs.utils import process_image_message
 
 from ssd_keras.keras_loss_function.keras_ssd_loss import SSDLoss
 
 
-class SSDKerasObjectDetector(RgbDetector):
+class SSDKerasObjectDetector(ImageDetector):
     def __init__(self, **kwargs):
         # for ROS image message conversion
         self._cv_bridge = CvBridge()
@@ -76,13 +76,13 @@ class SSDKerasObjectDetector(RgbDetector):
         for i in range(len(np_images)):
             boxes = []
             for box in y_pred_thresh[i]:
-                box_dict = { RgbDetectionKey.CLASS: self._classes[int(box[0])], RgbDetectionKey.CONF: box[1] }
+                box_dict = { ImageDetectionKey.CLASS: self._classes[int(box[0])], ImageDetectionKey.CONF: box[1] }
 
                 # Transform the predicted bounding boxes for the 300x300 image to the original image dimensions.
-                box_dict[RgbDetectionKey.X_MIN] = box[2] * image_messages[i].width / self._target_size[1]
-                box_dict[RgbDetectionKey.Y_MIN] = box[3] * image_messages[i].height / self._target_size[0]
-                box_dict[RgbDetectionKey.X_MAX] = box[4] * image_messages[i].width / self._target_size[1]
-                box_dict[RgbDetectionKey.Y_MAX] = box[5] * image_messages[i].height / self._target_size[0]
+                box_dict[ImageDetectionKey.X_MIN] = box[2] * image_messages[i].width / self._target_size[1]
+                box_dict[ImageDetectionKey.Y_MIN] = box[3] * image_messages[i].height / self._target_size[0]
+                box_dict[ImageDetectionKey.X_MAX] = box[4] * image_messages[i].width / self._target_size[1]
+                box_dict[ImageDetectionKey.Y_MAX] = box[5] * image_messages[i].height / self._target_size[0]
 
                 boxes.append(box_dict)
 

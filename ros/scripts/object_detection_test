@@ -7,7 +7,7 @@ def main(image_path, class_annotation_file, weight_file, get_model_func):
     import yaml
     import cv2
     from matplotlib import pyplot as plt
-    from mas_perception_libs import RgbDetectionKey
+    from mas_perception_libs import ImageDetectionKey
     from mas_perception_libs.visualization import BoundingBoxKey, visualize_boxes, bgr_dict_from_classes
     from ssd_keras_ros import SSDKerasObjectDetector
 
@@ -30,13 +30,13 @@ def main(image_path, class_annotation_file, weight_file, get_model_func):
 
     boxes = []
     for box in result[0]:
-        bounding_box = {BoundingBoxKey.X_MIN: box[RgbDetectionKey.X_MIN],
-                        BoundingBoxKey.Y_MIN: box[RgbDetectionKey.Y_MIN],
-                        BoundingBoxKey.X_MAX: box[RgbDetectionKey.X_MAX],
-                        BoundingBoxKey.Y_MAX: box[RgbDetectionKey.Y_MAX]}
-        label = '{}: {:.2f}'.format(box[RgbDetectionKey.CLASS], box[RgbDetectionKey.CONF])
+        bounding_box = {BoundingBoxKey.X_MIN: box[ImageDetectionKey.X_MIN],
+                        BoundingBoxKey.Y_MIN: box[ImageDetectionKey.Y_MIN],
+                        BoundingBoxKey.X_MAX: box[ImageDetectionKey.X_MAX],
+                        BoundingBoxKey.Y_MAX: box[ImageDetectionKey.Y_MAX]}
+        label = '{}: {:.2f}'.format(box[ImageDetectionKey.CLASS], box[ImageDetectionKey.CONF])
         bounding_box[BoundingBoxKey.LABEL] = label
-        bounding_box[BoundingBoxKey.COLOR] = color_dict[box[RgbDetectionKey.CLASS]]
+        bounding_box[BoundingBoxKey.COLOR] = color_dict[box[ImageDetectionKey.CLASS]]
         boxes.append(bounding_box)
 
     box_image = visualize_boxes(img, boxes)
