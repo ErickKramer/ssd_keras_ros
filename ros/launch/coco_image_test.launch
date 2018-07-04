@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="class_annotations" default="$(find ssd_keras_ros)/models/coco_classes.yml" />
+    <arg name="image_directory" default="TODO"/>
+    <arg name="kwargs_file" default="$(find ssd_keras_ros)/models/ssd_keras_object_detector_kwargs.yml" />
+    <arg name="detection_module" default="ssd_keras_ros" />
+    <arg name="detection_class" default="SSDKerasObjectDetector" />
+
+    <include file="$(find mas_perception_libs)/ros/launch/image_detection_test.launch" >
+        <arg name="class_annotations" value="$(arg class_annotations)" />
+        <arg name="image_directory" value="$(arg image_directory)" />
+        <arg name="kwargs_file" value="$(arg kwargs_file)" />
+        <arg name="detection_module" value="$(arg detection_module)" />
+        <arg name="detection_class" value="$(arg detection_class)" />
+    </include>
+</launch>

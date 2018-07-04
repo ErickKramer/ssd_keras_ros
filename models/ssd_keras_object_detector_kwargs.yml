@@ -1,0 +1,7 @@
+weight_file_package: 'ssd_keras_ros'
+weight_file_path: 'models/VGG_coco_SSD_300x300_iter_400000.h5'
+target_height: 300
+target_width: 300
+get_model_module: 'ssd_keras_ros.models'
+get_model_func_name: 'get_ssd300_coco_inference_model'
+conf_threshold: 0.5

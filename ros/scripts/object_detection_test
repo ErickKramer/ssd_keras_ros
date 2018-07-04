@@ -1,20 +1,15 @@
 #!/usr/bin/env python2
 import argparse
-from importlib import import_module
 
 
-def main(image_path, class_annotation_file, weight_file, get_model_func):
+def main(image_path, class_annotation_file, kwargs_file):
     import cv2
     from matplotlib import pyplot as plt
     from mas_perception_libs import ImageDetectionKey
     from mas_perception_libs.visualization import BoundingBoxKey, visualize_boxes, bgr_dict_from_classes
     from ssd_keras_ros import SSDKerasObjectDetector
 
-    detector = SSDKerasObjectDetector(weights_path=weight_file,
-                                      target_size=(300, 300),
-                                      class_file=class_annotation_file,
-                                      func_get_model=get_model_func,
-                                      conf_threshold=0.5)
+    detector = SSDKerasObjectDetector(class_file=class_annotation_file, model_kwargs_file=kwargs_file)
 
     img = cv2.imread(image_path)
     img_msg = detector._cv_bridge.cv2_to_imgmsg(img, 'bgr8')
@@ -44,14 +39,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tool to test ssd_keras object detection')
     parser.add_argument('--image', '-i', required=True, help='image to be tested.')
     parser.add_argument('--class-file', '-c', required=True, help='YAML file containing class annotations.')
-    parser.add_argument('--weight-file', '-w', required=True, help='file containing weights for the loaded model.')
-    parser.add_argument('--get-model-module', '-m', default='ssd_keras_ros.models',
-                        help='module containing function specified with --get-model-function.')
-    parser.add_argument('--get-model-function', '-f', default='get_ssd300_coco_inference_model',
-                        help='function used to construct SSD model, which should match with weight file.')
+    parser.add_argument('--kwargs-file', '-k', required=True,
+                        help='file contain keyword arguments for the detection class.')
     args = parser.parse_args()
 
-    print("importing function '{0}' from module '{1}'\n".format(args.get_model_function, args.get_model_module))
-    get_model_func = getattr(import_module(args.get_model_module), args.get_model_function)
-
-    main(args.image, args.class_file, args.weight_file, get_model_func)
+    # load kwargs file
+    main(args.image, args.class_file, args.kwargs_file)
