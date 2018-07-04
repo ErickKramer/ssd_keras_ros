@@ -14,11 +14,8 @@ def main(image_path, class_annotation_file, weight_file, get_model_func):
     with open(class_annotation_file, 'r') as infile:
         classes = yaml.load(infile)
 
-    detector = SSDKerasObjectDetector(weights_path=weight_file,
-                                      target_size=(300, 300),
-                                      classes=classes,
-                                      func_get_model=get_model_func,
-                                      conf_threshold=0.5)
+    detector = SSDKerasObjectDetector(classes, weights_path=weight_file, target_size=(300, 300),
+                                      func_get_model=get_model_func, conf_threshold=0.5)
 
     img = cv2.imread(image_path)
     img_msg = detector._cv_bridge.cv2_to_imgmsg(img, 'bgr8')

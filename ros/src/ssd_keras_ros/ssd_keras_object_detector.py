@@ -9,20 +9,15 @@ from ssd_keras.keras_loss_function.keras_ssd_loss import SSDLoss
 
 
 class SSDKerasObjectDetector(ImageDetector):
-    def __init__(self, **kwargs):
+    def __init__(self, classes, **kwargs):
         # for ROS image message conversion
         self._cv_bridge = CvBridge()
         # initialize members
         self._target_size = None
         self._img_preprocess_func = None
         self._conf_threshold = None
-        self._classes = None
         self._model = None
-        super(SSDKerasObjectDetector, self).__init__(**kwargs)
-
-    @property
-    def classes(self):
-        return self._classes
+        super(SSDKerasObjectDetector, self).__init__(classes, **kwargs)
 
     def load_model(self, **kwargs):
         from keras import backend as K
@@ -41,10 +36,6 @@ class SSDKerasObjectDetector(ImageDetector):
         func_get_model = kwargs.get('func_get_model', None)
         if func_get_model is None:
             raise ValueError('func_get_model not specified.')
-
-        self._classes = kwargs.get('classes', None)
-        if self._classes is None:
-            raise ValueError('list of classes not specified.')
 
         K.clear_session()
         # call get_model function with image dimensions, number of classes & confidence threshold
