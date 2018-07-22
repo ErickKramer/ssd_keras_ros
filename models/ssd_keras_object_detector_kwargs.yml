@@ -4,4 +4,4 @@ target_height: 300
 target_width: 300
 get_model_module: 'ssd_keras_ros.models'
 get_model_func_name: 'get_ssd300_coco_inference_model'
-conf_threshold: 0.5
+conf_threshold: 0.35
