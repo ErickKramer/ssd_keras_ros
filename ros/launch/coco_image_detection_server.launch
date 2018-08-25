@@ -1,13 +1,17 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="service_name" default="detect_image"/>
+    <arg name="action_name" default="/mas_perception/detect_image"/>
+    <arg name="cloud_topic" default="" />
+    <arg name="target_frame" default="/base_link" />
     <arg name="class_annotations" default="$(find ssd_keras_ros)/models/coco_classes.yml" />
     <arg name="kwargs_file" default="$(find ssd_keras_ros)/models/ssd_keras_object_detector_kwargs.yml" />
     <arg name="detection_module" default="ssd_keras_ros" />
     <arg name="detection_class" default="SSDKerasObjectDetector" />
 
     <include file="$(find mas_perception_libs)/ros/launch/image_detection.launch" >
-        <arg name="service_name" value="$(arg service_name)" />
+        <arg name="action_name" value="$(arg action_name)" />
+        <arg name="cloud_topic" value="$(arg cloud_topic)" />
+        <arg name="target_frame" value="$(arg target_frame)" />
         <arg name="class_annotations" value="$(arg class_annotations)" />
         <arg name="kwargs_file" value="$(arg kwargs_file)" />
         <arg name="detection_module" value="$(arg detection_module)" />

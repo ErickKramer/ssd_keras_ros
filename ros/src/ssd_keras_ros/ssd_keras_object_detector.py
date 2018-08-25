@@ -8,8 +8,6 @@ from cv_bridge import CvBridge
 from mas_perception_libs import ImageDetector, ImageDetectionKey
 from mas_perception_libs.utils import process_image_message
 
-from ssd_keras.keras_loss_function.keras_ssd_loss import SSDLoss
-
 
 class SSDKerasObjectDetector(ImageDetector):
     def __init__(self, **kwargs):
@@ -26,6 +24,7 @@ class SSDKerasObjectDetector(ImageDetector):
     def load_model(self, **kwargs):
         from keras import backend as K
         from keras.optimizers import Adam
+        from ssd_keras.keras_loss_function.keras_ssd_loss import SSDLoss
 
         # get path to weight file, relative to ROS package
         weight_file_package = kwargs.get('weight_file_package', None)
