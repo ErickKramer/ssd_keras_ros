@@ -3,16 +3,12 @@ import numpy as np
 from importlib import import_module
 
 from rospkg import RosPack
-from cv_bridge import CvBridge
 
 from mas_perception_libs import ImageDetector, ImageDetectionKey
-from mas_perception_libs.utils import process_image_message
 
 
 class SSDKerasObjectDetector(ImageDetector):
     def __init__(self, **kwargs):
-        # for ROS image message conversion
-        self._cv_bridge = CvBridge()
         # initialize members
         self._target_size = None
         self._img_preprocess_func = None
@@ -69,12 +65,7 @@ class SSDKerasObjectDetector(ImageDetector):
         # see https://github.com/keras-team/keras/issues/6462
         self._model._make_predict_function()
 
-    def detect(self, image_messages):
-        if len(image_messages) == 0:
-            return []
-
-        np_images = [process_image_message(msg, self._cv_bridge, self._target_size, self._img_preprocess_func)
-                     for msg in image_messages]
+    def _detect(self, np_images, orig_img_sizes):
         image_array =  np.stack(np_images, axis=0)
 
         y_pred = self._model.predict(image_array)
@@ -91,10 +82,10 @@ class SSDKerasObjectDetector(ImageDetector):
             for box in y_pred_thresh[i]:
                 # Transform the predicted bounding boxes for the 300x300 image to the original image dimensions.
                 box_dict = {ImageDetectionKey.CLASS: self._classes[int(box[0])], ImageDetectionKey.CONF: box[1],
-                            ImageDetectionKey.X_MIN: box[2] * image_messages[i].width / self._target_size[1],
-                            ImageDetectionKey.Y_MIN: box[3] * image_messages[i].height / self._target_size[0],
-                            ImageDetectionKey.X_MAX: box[4] * image_messages[i].width / self._target_size[1],
-                            ImageDetectionKey.Y_MAX: box[5] * image_messages[i].height / self._target_size[0]}
+                            ImageDetectionKey.X_MIN: box[2] * orig_img_sizes[i][0] / self._target_size[1],
+                            ImageDetectionKey.Y_MIN: box[3] * orig_img_sizes[i][1] / self._target_size[0],
+                            ImageDetectionKey.X_MAX: box[4] * orig_img_sizes[i][0] / self._target_size[1],
+                            ImageDetectionKey.Y_MAX: box[5] * orig_img_sizes[i][1] / self._target_size[0]}
 
                 boxes.append(box_dict)
 
