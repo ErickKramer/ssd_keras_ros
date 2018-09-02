@@ -4,10 +4,10 @@ from importlib import import_module
 
 from rospkg import RosPack
 
-from mas_perception_libs import ImageDetector, ImageDetectionKey
+from mas_perception_libs import ImageDetectorBase, ImageDetectionKey
 
 
-class SSDKerasObjectDetector(ImageDetector):
+class SSDKerasObjectDetector(ImageDetectorBase):
     def __init__(self, **kwargs):
         # initialize members
         self._target_size = None
